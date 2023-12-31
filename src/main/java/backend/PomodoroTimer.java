@@ -7,33 +7,30 @@ public class PomodoroTimer {
   private int workIntervals = 4;
   private int currentInterval = 0;
   private Interval currentIntervalType = Interval.Work;
-  private final Map<Interval, Double> intervalDurations = new HashMap<>();
+  private final Map<Interval, Time> intervalDurations = new HashMap<>();
   private final Timer timer;
 
   public PomodoroTimer() {
-    this(System.currentTimeMillis());
+    this(Time.now());
   }
 
-  public PomodoroTimer(long startTimeMs) {
-    timer = new Timer(startTimeMs);
-    intervalDurations.put(Interval.Work, 25.0);
-    intervalDurations.put(Interval.ShortBreak, 5.0);
-    intervalDurations.put(Interval.LongBreak, 15.0);
+  protected PomodoroTimer(Time start) {
+    timer = new Timer(start);
+    intervalDurations.put(Interval.Work, Time.fromMinutes(25));
+    intervalDurations.put(Interval.ShortBreak, Time.fromMinutes(5));
+    intervalDurations.put(Interval.LongBreak, Time.fromMinutes(15));
   }
 
-  private double currentDuration() {
+  private Time currentDuration() {
     return intervalDurations.get(currentIntervalType);
   }
 
-  public double getRemainingTime() {
-    timer.takeLap();
-    return currentDuration() - timer.getMinutes();
+  public Time getRemainingTime() {
+    return getRemainingTime(Time.now());
   }
 
-  public double getRemainingTime(double elapsedMins) {
-    long elapsedMs = (long) (elapsedMins * 60 * 1000);
-    timer.takeLap(elapsedMs);
-    return currentDuration() - timer.getMinutes();
+  protected Time getRemainingTime(Time elapsed) {
+    return currentDuration().subtract(timer.getTime(elapsed));
   }
 
   public PomodoroTimer setWorkIntervalsAmount(int intervals) {
@@ -41,43 +38,43 @@ public class PomodoroTimer {
     return this;
   }
 
-  private PomodoroTimer setIntervalDuration(Interval type, double duration) {
-    if (duration <= 0) {
+  private PomodoroTimer setIntervalDuration(Interval type, Time duration) {
+    if (duration.isNegative()) {
       throw new IllegalArgumentException("Interval duration must be greater than 0");
     }
     intervalDurations.put(type, duration);
     return this;
   }
 
-  public PomodoroTimer setWorkInterval(double duration) {
+  public PomodoroTimer setWorkInterval(Time duration) {
     return setIntervalDuration(Interval.Work, duration);
   }
 
-  public PomodoroTimer setShortBreakInterval(double duration) {
+  public PomodoroTimer setShortBreakInterval(Time duration) {
     return setIntervalDuration(Interval.ShortBreak, duration);
   }
 
-  public PomodoroTimer setLongBreakInterval(double duration) {
+  public PomodoroTimer setLongBreakInterval(Time duration) {
     return setIntervalDuration(Interval.LongBreak, duration);
   }
 
-  private double getIntervalDuration(Interval type) {
+  private Time getIntervalDuration(Interval type) {
     return intervalDurations.get(type);
   }
 
-  public double getWorkInterval() {
+  public Time getWorkInterval() {
     return getIntervalDuration(Interval.Work);
   }
 
-  public double getShortBreakInterval() {
+  public Time getShortBreakInterval() {
     return getIntervalDuration(Interval.ShortBreak);
   }
 
-  public double getLongBreakInterval() {
+  public Time getLongBreakInterval() {
     return getIntervalDuration(Interval.LongBreak);
   }
 
-  public double getCurrentInterval() {
+  public Time getCurrentInterval() {
     return getIntervalDuration(currentIntervalType);
   }
 
@@ -87,20 +84,35 @@ public class PomodoroTimer {
 
   private String intervalDurationsString() {
     StringBuilder sb = new StringBuilder("{\n");
-    intervalDurations.forEach((key, value) -> sb.append("\t%s: %.1f,\n".formatted(key, value)));
+    intervalDurations.forEach(
+        (intervalType, duration) -> sb.append("\t%s: %s,\n".formatted(intervalType, duration)));
     sb.append("}");
     return sb.toString();
   }
 
   public void nextInterval() {
-    ++currentInterval;
-    if (currentInterval == 2 * workIntervals) {
+    nextInterval(Time.now());
+  }
+
+  protected void nextInterval(Time intervalStart) {
+    currentInterval = (currentInterval + 1) % (2 * workIntervals);
+    if (currentInterval == 2 * workIntervals - 1) {
       currentIntervalType = Interval.LongBreak;
     } else if (currentInterval % 2 == 0) {
       currentIntervalType = Interval.Work;
     } else {
       currentIntervalType = Interval.ShortBreak;
     }
+    timer.restart(intervalStart);
+  }
+
+  public void resetInterval() {
+    timer.restart();
+  }
+
+  public void resetTimer() {
+    currentInterval = 0;
+    currentIntervalType = Interval.Work;
     timer.restart();
   }
 
@@ -111,13 +123,14 @@ public class PomodoroTimer {
             + "\tworkIntervals: %d,\n"
             + "\tcurrentInterval: %d,\n"
             + "\tcurrentIntervalType: %s,\n"
+            // + "\tremainingTime: %s\n"
             + "\tIntervals: %s,\n"
-            // + "\tremainingTime: %.1f mins\n"
             + "\n}")
         .formatted(
             workIntervals,
             currentInterval,
             currentIntervalType,
+            // getRemainingTime(),
             intervalDurationsString().replace("\t", "\t\t").replace("}", "\t}"));
   }
 }
