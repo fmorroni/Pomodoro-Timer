@@ -98,6 +98,10 @@ public class Time implements Comparable<Time> {
     return new Time(getInMs() + other.getInMs());
   }
 
+  public static Time now() {
+    return new Time(System.currentTimeMillis());
+  }
+
   @Override
   public String toString() {
     return "%s%02d:%02d:%02d:%02d".formatted(isNegative ? "-" : "", hours, minutes, seconds, ms);

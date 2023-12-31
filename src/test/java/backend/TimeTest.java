@@ -1,6 +1,7 @@
+package backend;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import backend.Time;
 import org.junit.jupiter.api.Test;
 
 public class TimeTest {
@@ -117,24 +118,19 @@ public class TimeTest {
     Time t3 = new Time(123456);
     Time t4 = new Time(-t3.getInMs());
 
-    assertEquals(
-        new Time(t1.getInMs() - t2.getInMs()),
-        t1.subtract(t2),
-        "Subtraction positive");
+    assertEquals(new Time(t1.getInMs() - t2.getInMs()), t1.subtract(t2), "Subtraction positive");
 
-    assertEquals(
-        new Time(t1.getInMs() - t3.getInMs()),
-        t1.subtract(t3),
-        "Subtraction negative");
+    assertEquals(new Time(t1.getInMs() - t3.getInMs()), t1.subtract(t3), "Subtraction negative");
 
-    assertEquals(
-        new Time(t1.getInMs() + t3.getInMs()),
-        t1.add(t3),
-        "Addition");
+    assertEquals(new Time(t1.getInMs() + t3.getInMs()), t1.add(t3), "Addition");
 
-    assertEquals(
-        new Time(t1.getInMs() - t3.getInMs()),
-        t1.add(t4),
-        "Addition with negative");
+    assertEquals(new Time(t1.getInMs() - t3.getInMs()), t1.add(t4), "Addition with negative");
+  }
+
+  @Test
+  public void testNow() {
+    assertTrue(
+        Time.now().getInMs() == System.currentTimeMillis(),
+        "Time.now() should return the current system time");
   }
 }
