@@ -78,7 +78,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <mainClass>frontend.PomodoroCli</mainClass>
+          <mainClass>frontend.cli.PomodoroCli</mainClass>
         </configuration>
       </plugin>
     </plugins>
