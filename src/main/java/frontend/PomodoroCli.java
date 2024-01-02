@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 import backend.PomodoroTimer;
 import backend.Time;

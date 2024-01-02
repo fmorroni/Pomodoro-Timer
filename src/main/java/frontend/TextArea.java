@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 public class TextArea {
   protected final int rows, cols;

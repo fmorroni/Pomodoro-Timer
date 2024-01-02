@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

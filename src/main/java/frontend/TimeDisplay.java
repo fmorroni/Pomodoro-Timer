@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 import backend.Time;
 import java.util.HashMap;

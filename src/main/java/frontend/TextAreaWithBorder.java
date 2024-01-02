@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 public class TextAreaWithBorder extends TextArea {
   private final int rowsInner, colsInner, borderOffsetRow, borderOffsetCol;

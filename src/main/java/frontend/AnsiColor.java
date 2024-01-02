@@ -1,4 +1,4 @@
-package frontend.cli;
+package frontend;
 
 public enum AnsiColor {
   AnsiBlack("\u001B[30m"),
