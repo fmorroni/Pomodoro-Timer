@@ -55,18 +55,10 @@ public class TextAreaWithBorder extends TextArea {
   }
 
   public void setString(int row, int col, String s) {
-    boolean wrap = false;
-    int k = 0;
-    for (int i = row; i < rowsInner && k < s.length(); ++i) {
-      int offset = wrap ? 0 : col;
-      for (int j = 0; j + offset < colsInner && k < s.length(); ++j, ++k) {
-        setChar(i, j + offset, s.charAt(k));
-      }
-      wrap = true;
-    }
+    super.setString(rowsInner, colsInner, row, col, s);
   }
 
-  private enum Border {
+  private static enum Border {
     // ┌─────┐
     // │     │
     // └─────┘

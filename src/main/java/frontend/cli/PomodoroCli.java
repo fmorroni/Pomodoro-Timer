@@ -10,7 +10,8 @@ public class PomodoroCli {
   private static PomodoroTimer pomodoro = new PomodoroTimer();
   private static Scanner scan = new Scanner(System.in);
   private static boolean exit = false;
-
+  private static TimeDisplay timeDisplay = new TimeDisplay();
+  private static TextAreaWithBorder intervalTypeArea = new TextAreaWithBorder(1, 30);
   private static final Option[] options = {
     new Option("Exit", () -> exit = true),
     new Option("Print time", () -> System.out.println(pomodoro.getRemainingTime())),
@@ -29,7 +30,7 @@ public class PomodoroCli {
         "Set work interval duration",
         () -> {
           System.out.printf("How long should the work intervals be?\nMinutes: ");
-          Double duration = handleInput(() -> scan.nextDouble());
+          Double duration = handleIntervalDurationInput(() -> scan.nextDouble());
           if (duration == null) return;
           pomodoro.setWorkInterval(Time.fromMinutes(duration));
         }),
@@ -37,7 +38,7 @@ public class PomodoroCli {
         "Set short break interval duration",
         () -> {
           System.out.printf("How long should the short breaks be?\nMinutes: ");
-          Double duration = handleInput(() -> scan.nextDouble());
+          Double duration = handleIntervalDurationInput(() -> scan.nextDouble());
           if (duration == null) return;
           pomodoro.setShortBreakInterval(Time.fromMinutes(duration));
         }),
@@ -45,12 +46,69 @@ public class PomodoroCli {
         "Set long break interval duration",
         () -> {
           System.out.printf("How long should the long breaks be?\nMinutes: ");
-          Double duration = handleInput(() -> scan.nextDouble());
+          Double duration = handleIntervalDurationInput(() -> scan.nextDouble());
           if (duration == null) return;
           pomodoro.setLongBreakInterval(Time.fromMinutes(duration));
         }),
     new Option("Reset timer", () -> pomodoro.resetTimer()),
   };
+
+  private static TextAreaWithBorder optionsArea = new TextAreaWithBorder(options.length, 40);
+
+  static {
+    for (int i = 0; i < options.length; ++i) {
+      optionsArea.setString(i, 0, "%d - %s".formatted(i, options[i]));
+    }
+  }
+
+  private static AnsiColor timerColor;
+
+  public static void main(String[] args) throws InterruptedException {
+    pomodoro.setWorkInterval(Time.fromSeconds(5)).setShortBreakInterval(Time.fromSeconds(3));
+
+    StackContainer container = new StackContainer();
+    container.addAll(intervalTypeArea, timeDisplay, optionsArea);
+
+    updateIntervalTypeArea();
+    updateTimeDisplayColor();
+
+    while (true) {
+      cls();
+      Time remaining = pomodoro.getRemainingTime();
+      if (remaining.isNegative()) {
+        pomodoro.nextInterval();
+        updateIntervalTypeArea();
+        updateTimeDisplayColor();
+        remaining = pomodoro.getRemainingTime();
+      }
+      timeDisplay.setDisplay(remaining);
+      System.out.println(container);
+      Thread.sleep(1000);
+      System.out.flush();
+    }
+    // askOptions();
+  }
+
+  private static void updateTimeDisplayColor() {
+    switch (pomodoro.getCurrentIntervalType()) {
+      case Work:
+        timerColor = AnsiColor.AnsiRed;
+        break;
+      case ShortBreak:
+        timerColor = AnsiColor.AnsiGreen;
+        break;
+      case LongBreak:
+        timerColor = AnsiColor.AnsiBlue;
+        break;
+    }
+    timeDisplay.setColor(timerColor);
+  }
+
+  private static void updateIntervalTypeArea() {
+    intervalTypeArea.reset();
+    intervalTypeArea.setString(
+        0, 0, "Current Interval: %s".formatted(pomodoro.getCurrentIntervalType().toString()));
+  }
 
   private static <T> T handleInput(Supplier<T> scannerAction) {
     try {
@@ -62,17 +120,26 @@ public class PomodoroCli {
     }
   }
 
-  public static void main(String[] args) {
-    askOptions();
+  private static Double handleIntervalDurationInput(Supplier<Double> scannerAction) {
+    Double value = handleInput(scannerAction);
+    if (value >= 60) {
+      System.out.println("Invalid value: Duration should be lower than 60 minutes\n");
+      return null;
+    }
+    return value;
   }
 
-  public static void printOptions() {
+  private static void cls() {
+    System.out.printf("\033[H\033[J");
+  }
+
+  private static void printOptions() {
     for (int i = 0; i < options.length; ++i) {
       System.out.printf("%d - %s\n", i, options[i]);
     }
   }
 
-  public static void askOptions() {
+  private static void askOptions() {
     if (exit) return;
     int i = 0;
     boolean invalidOption = true;

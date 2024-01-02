@@ -4,6 +4,8 @@ public class TextArea {
   protected final int rows, cols;
   private final char[][] area;
 
+  private AnsiColor color = AnsiColor.Default;
+
   public TextArea(int rows, int cols) {
     this.cols = cols;
     this.rows = rows;
@@ -23,16 +25,32 @@ public class TextArea {
     area[row][col] = c;
   }
 
-  public void setString(int row, int col, String s) {
+  protected void setString(int totRows, int totCols, int row, int col, String s) {
     boolean wrap = false;
     int k = 0;
-    for (int i = row; i < rows && k < s.length(); ++i) {
+    for (int i = row; i < totRows && k < s.length(); ++i) {
       int offset = wrap ? 0 : col;
-      for (int j = 0; j + offset < cols && k < s.length(); ++j, ++k) {
-        area[i][j + offset] = s.charAt(k);
+      for (int j = 0; j + offset < totCols && k < s.length(); ++j, ++k) {
+        setChar(i, j + offset, s.charAt(k));
       }
       wrap = true;
     }
+  }
+
+  public void setString(int row, int col, String s) {
+    setString(rows, cols, row, col, s);
+  }
+
+  public void setColor(AnsiColor color) {
+    this.color = color;
+  }
+
+  public int getWidth() {
+      return cols;
+  }
+
+  public int getHeight() {
+      return rows;
   }
 
   @Override
@@ -44,6 +62,6 @@ public class TextArea {
       }
       sb.append('\n');
     }
-    return sb.toString();
+    return color.convert(sb.toString());
   }
 }
