@@ -1,0 +1,29 @@
+NavigationDrawer {
+  -fx-background-color: #2f384b;
+  -fx-background: #3c4356;
+}
+
+Label {
+  -fx-font-size: 1.2em;
+  /* -fx-text-fill: -primary-swatch-700; */
+}
+
+.slider { 
+  -track-color: linear-gradient(to right, red 0, #2f384b 0);
+  -thumb-color: red;
+}
+
+.slider .track {
+  /* -fx-background-color: -track-color; */
+  -fx-background-color: -track-color;
+  -fx-padding: 13px;
+}
+
+.slider .thumb {
+  -fx-background-color: -thumb-color;
+}
+
+.slider-label {
+  -fx-background-color: #2f384b;
+  -fx-text-fill: #bdbcbd;
+}
