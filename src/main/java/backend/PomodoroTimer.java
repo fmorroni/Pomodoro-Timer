@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PomodoroTimer {
-  private int workIntervals = 4;
+  private int rounds = 4;
   private int currentInterval = 0;
   private Interval currentIntervalType = Interval.Work;
   private final Map<Interval, Time> intervalDurations = new HashMap<>();
@@ -34,7 +34,7 @@ public class PomodoroTimer {
   }
 
   public PomodoroTimer setWorkIntervalsAmount(int intervals) {
-    this.workIntervals = intervals;
+    this.rounds = intervals;
     return this;
   }
 
@@ -95,8 +95,8 @@ public class PomodoroTimer {
   }
 
   protected void nextInterval(Time intervalStart) {
-    currentInterval = (currentInterval + 1) % (2 * workIntervals);
-    if (currentInterval == 2 * workIntervals - 1) {
+    currentInterval = (currentInterval + 1) % (2 * rounds);
+    if (currentInterval == 2 * rounds - 1) {
       currentIntervalType = Interval.LongBreak;
     } else if (currentInterval % 2 == 0) {
       currentIntervalType = Interval.Work;
@@ -127,7 +127,7 @@ public class PomodoroTimer {
             + "\tIntervals: %s,\n"
             + "\n}")
         .formatted(
-            workIntervals,
+            rounds,
             currentInterval,
             currentIntervalType,
             // getRemainingTime(),
