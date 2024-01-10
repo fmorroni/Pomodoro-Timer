@@ -74,28 +74,28 @@ public class Time implements Comparable<Time> {
     return hours;
   }
 
-  public long getInMs() {
+  public long toMs() {
     return (isNegative ? -1 : 1) * totalMs;
   }
 
-  public double getInSeconds() {
-    return (double) getInMs() / secondsToMsRatio;
+  public double toSeconds() {
+    return (double) toMs() / secondsToMsRatio;
   }
 
-  public double getInMinutes() {
-    return (double) getInMs() / minutesToMsRatio;
+  public double toMinutes() {
+    return (double) toMs() / minutesToMsRatio;
   }
 
-  public double getInHours() {
-    return (double) getInMs() / hoursToMsRatio;
+  public double toHours() {
+    return (double) toMs() / hoursToMsRatio;
   }
 
   public Time subtract(Time other) {
-    return new Time(getInMs() - other.getInMs());
+    return new Time(toMs() - other.toMs());
   }
 
   public Time add(Time other) {
-    return new Time(getInMs() + other.getInMs());
+    return new Time(toMs() + other.toMs());
   }
 
   public static Time now() {
@@ -105,6 +105,10 @@ public class Time implements Comparable<Time> {
   @Override
   public String toString() {
     return "%s%02d:%02d:%02d:%02d".formatted(isNegative ? "-" : "", hours, minutes, seconds, ms);
+  }
+
+  public String toStringMinutesAndSeconds() {
+    return "%s%02d:%02d".formatted(isNegative ? "-" : "", hours * 60 + minutes, seconds);
   }
 
   @Override
@@ -118,6 +122,6 @@ public class Time implements Comparable<Time> {
   @Override
   public int compareTo(Time other) {
     if (this == other) return 0;
-    return Long.valueOf(getInMs()).compareTo(other.getInMs());
+    return Long.valueOf(toMs()).compareTo(other.toMs());
   }
 }

@@ -15,7 +15,7 @@ public class TimerTest {
 
   @Test
   public void timeTest() {
-    assertEquals(new Time(end.subtract(start).getInMs()), tmr.getTime(end), "Assert time");
+    assertEquals(new Time(end.subtract(start).toMs()), tmr.getTime(end), "Assert time");
   }
 
   @Test

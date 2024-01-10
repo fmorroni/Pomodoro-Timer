@@ -42,13 +42,13 @@ public class TimeTest {
   public void testConversionToTotals() {
     long ms = 98625340L;
     Time t = new Time(ms);
-    assertEquals(ms, t.getInMs(), "Milliseconds");
-    assertEquals(ms / 1000.0, t.getInSeconds(), 1e-5, "Seconds");
-    assertEquals(ms / 60000.0, t.getInMinutes(), 1e-5, "Minutes");
-    assertEquals(ms / 3600000.0, t.getInHours(), 1e-5, "Hours");
+    assertEquals(ms, t.toMs(), "Milliseconds");
+    assertEquals(ms / 1000.0, t.toSeconds(), 1e-5, "Seconds");
+    assertEquals(ms / 60000.0, t.toMinutes(), 1e-5, "Minutes");
+    assertEquals(ms / 3600000.0, t.toHours(), 1e-5, "Hours");
 
     t = new Time(-1000);
-    assertEquals(-1, t.getInSeconds(), 1e-5, "Seconds");
+    assertEquals(-1, t.toSeconds(), 1e-5, "Seconds");
   }
 
   @Test
@@ -116,21 +116,21 @@ public class TimeTest {
     Time t1 = new Time(12345);
     Time t2 = new Time(1234);
     Time t3 = new Time(123456);
-    Time t4 = new Time(-t3.getInMs());
+    Time t4 = new Time(-t3.toMs());
 
-    assertEquals(new Time(t1.getInMs() - t2.getInMs()), t1.subtract(t2), "Subtraction positive");
+    assertEquals(new Time(t1.toMs() - t2.toMs()), t1.subtract(t2), "Subtraction positive");
 
-    assertEquals(new Time(t1.getInMs() - t3.getInMs()), t1.subtract(t3), "Subtraction negative");
+    assertEquals(new Time(t1.toMs() - t3.toMs()), t1.subtract(t3), "Subtraction negative");
 
-    assertEquals(new Time(t1.getInMs() + t3.getInMs()), t1.add(t3), "Addition");
+    assertEquals(new Time(t1.toMs() + t3.toMs()), t1.add(t3), "Addition");
 
-    assertEquals(new Time(t1.getInMs() - t3.getInMs()), t1.add(t4), "Addition with negative");
+    assertEquals(new Time(t1.toMs() - t3.toMs()), t1.add(t4), "Addition with negative");
   }
 
   @Test
   public void testNow() {
     assertTrue(
-        Time.now().getInMs() == System.currentTimeMillis(),
+        Time.now().toMs() == System.currentTimeMillis(),
         "Time.now() should return the current system time");
   }
 }
