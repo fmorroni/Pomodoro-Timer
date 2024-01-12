@@ -33,8 +33,8 @@ public class PomodoroTimer {
     return currentDuration().subtract(timer.getTime(elapsed));
   }
 
-  public PomodoroTimer setWorkIntervalsAmount(int intervals) {
-    this.rounds = intervals;
+  public PomodoroTimer setRounds(int rounds) {
+    this.rounds = rounds;
     return this;
   }
 
@@ -46,15 +46,15 @@ public class PomodoroTimer {
     return this;
   }
 
-  public PomodoroTimer setWorkInterval(Time duration) {
+  public PomodoroTimer setWorkDuration(Time duration) {
     return setIntervalDuration(Interval.Work, duration);
   }
 
-  public PomodoroTimer setShortBreakInterval(Time duration) {
+  public PomodoroTimer setShortBreakDuration(Time duration) {
     return setIntervalDuration(Interval.ShortBreak, duration);
   }
 
-  public PomodoroTimer setLongBreakInterval(Time duration) {
+  public PomodoroTimer setLongBreakDuration(Time duration) {
     return setIntervalDuration(Interval.LongBreak, duration);
   }
 
@@ -62,19 +62,19 @@ public class PomodoroTimer {
     return intervalDurations.get(type);
   }
 
-  public Time getWorkInterval() {
+  public Time getWorkDuration() {
     return getIntervalDuration(Interval.Work);
   }
 
-  public Time getShortBreakInterval() {
+  public Time getShortBreakDuration() {
     return getIntervalDuration(Interval.ShortBreak);
   }
 
-  public Time getLongBreakInterval() {
+  public Time getLongBreakDuration() {
     return getIntervalDuration(Interval.LongBreak);
   }
 
-  public Time getCurrentInterval() {
+  public Time getCurrentIntervalDuration() {
     return getIntervalDuration(currentIntervalType);
   }
 

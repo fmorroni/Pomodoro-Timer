@@ -9,13 +9,13 @@ public class PomodoroTimerTest {
   public void test() {
     PomodoroTimer pt =
         new PomodoroTimer(new Time(0))
-            .setWorkInterval(Time.fromMinutes(32))
-            .setWorkIntervalsAmount(5)
-            .setShortBreakInterval(Time.fromMinutes(3.5));
+            .setWorkDuration(Time.fromMinutes(32))
+            .setRounds(5)
+            .setShortBreakDuration(Time.fromMinutes(3.5));
 
     Time elapsedTime = Time.fromMinutes(10.4);
     assertEquals(
-        pt.getCurrentInterval().subtract(elapsedTime), pt.getRemainingTime(elapsedTime));
+        pt.getCurrentIntervalDuration().subtract(elapsedTime), pt.getRemainingTime(elapsedTime));
 
     pt.nextInterval();
   }
