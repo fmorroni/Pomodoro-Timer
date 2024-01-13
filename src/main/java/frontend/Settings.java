@@ -35,9 +35,6 @@ public class Settings {
   }
 
   public void load() {
-    System.out.println("Pomodoro before: ");
-    System.out.println(pomodoro);
-
     pomodoro
         .setWorkDuration(Time.fromSeconds(preferences.getDouble(WORK_DURATION_KEY, 25 * 60)))
         .setShortBreakDuration(
@@ -46,9 +43,6 @@ public class Settings {
             Time.fromSeconds(preferences.getDouble(LONG_BREAK_DURATION_KEY, 15 * 60)))
         .setRounds(preferences.getInt(ROUNDS_KEY, 4));
     pomodoro.resetTimer();
-
-    System.out.println("Pomodoro after: ");
-    System.out.println(pomodoro);
   }
 
   // @Override

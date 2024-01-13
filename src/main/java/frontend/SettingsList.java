@@ -50,22 +50,6 @@ public class SettingsList {
 
     saveBtn.setOnAction(
         (ev) -> {
-          System.out.println(
-              "%s: %s"
-                  .formatted(
-                      Settings.WORK_DURATION_KEY,
-                      timeItems.get(Settings.WORK_DURATION_KEY).getValue()));
-          System.out.println(
-              "%s: %s"
-                  .formatted(
-                      Settings.SHORT_BREAK_DURATION_KEY,
-                      timeItems.get(Settings.SHORT_BREAK_DURATION_KEY).getValue()));
-          System.out.println(
-              "%s: %s"
-                  .formatted(
-                      Settings.LONG_BREAK_DURATION_KEY,
-                      timeItems.get(Settings.LONG_BREAK_DURATION_KEY).getValue()));
-
           settings.saveWorkDuration(timeItems.get(Settings.WORK_DURATION_KEY).getValue());
           settings.saveShortBrakeDuration(
               timeItems.get(Settings.SHORT_BREAK_DURATION_KEY).getValue());
