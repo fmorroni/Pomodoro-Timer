@@ -2,8 +2,6 @@ package frontend;
 
 import backend.PomodoroTimer;
 import backend.Time;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,52 +12,40 @@ import javafx.scene.layout.VBox;
 public class SettingsList {
   private final VBox list = new VBox();
   private final Button saveBtn = new Button("Save");
-  private final Map<String, LabeledSlider<Time>> timeItems = new HashMap<>();
-
-  // private final Map<String, LabeledSlider<Number>> numericItems = new HashMap<>();
-
-  // private final PomodoroTimer pomodoro;
-  // private final Settings settings;
 
   public SettingsList(PomodoroTimer pomodoro, Settings settings) {
-    // this.pomodoro = pomodoro;
-    // this.settings = settings;
+    TimeSlider workSlider =
+        new TimeSlider(
+            Time.fromMinutes(10), Time.fromHours(1), pomodoro.getWorkDuration(), "#fe4d4c");
+    addSlider("Work Interval Duration", workSlider);
 
-    addTimeSlider(
-        Settings.WORK_DURATION_KEY,
-        "Work Interval Duration",
-        Time.fromMinutes(10),
-        Time.fromHours(1),
-        pomodoro.getWorkDuration(),
-        "#fe4d4c");
-    addTimeSlider(
-        Settings.SHORT_BREAK_DURATION_KEY,
-        "Short Break Interval Duration",
-        Time.fromSeconds(0),
-        Time.fromSeconds(60),
-        pomodoro.getShortBreakDuration(),
-        "#05eb8b");
-    addTimeSlider(
-        Settings.LONG_BREAK_DURATION_KEY,
-        "Long Break Interval Duration",
-        Time.fromMinutes(5),
-        Time.fromMinutes(40),
-        pomodoro.getLongBreakDuration(),
-        "#0bbcda");
+    TimeSlider shortBreakSlider =
+        new TimeSlider(
+            Time.fromMinutes(1), Time.fromMinutes(10), pomodoro.getShortBreakDuration(), "#05eb8b");
+
+    addSlider("Short Break Interval Duration", shortBreakSlider);
+
+    TimeSlider longBreakSlider =
+        new TimeSlider(
+            Time.fromMinutes(5), Time.fromMinutes(40), pomodoro.getLongBreakDuration(), "#0bbcda");
+    addSlider("Long Break Interval Duration", longBreakSlider);
+
+    IntSlider roundsSlider = new IntSlider(1, 10, pomodoro.getRounds(), "#848b98");
+    addSlider("Rounds", roundsSlider);
+
     list.getChildren().add(saveBtn);
 
     saveBtn.setOnAction(
         (ev) -> {
-          settings.saveWorkDuration(timeItems.get(Settings.WORK_DURATION_KEY).getValue());
-          settings.saveShortBrakeDuration(
-              timeItems.get(Settings.SHORT_BREAK_DURATION_KEY).getValue());
-          settings.saveLongBrakeDuration(
-              timeItems.get(Settings.LONG_BREAK_DURATION_KEY).getValue());
+          settings.saveWorkDuration(workSlider.getValue());
+          settings.saveShortBrakeDuration(shortBreakSlider.getValue());
+          settings.saveLongBrakeDuration(longBreakSlider.getValue());
+          settings.saveRounds(roundsSlider.getValue());
           settings.load();
         });
   }
 
-  private <T> void addSlider(String key, String title, LabeledSlider<T> slider) {
+  private <T> void addSlider(String title, LabeledSlider<T> slider) {
     VBox vbox = new VBox();
     // setSpacing(10);
     vbox.setAlignment(Pos.CENTER_LEFT);
@@ -68,18 +54,6 @@ public class SettingsList {
     vbox.setPadding(new Insets(10));
     list.getChildren().add(vbox);
   }
-
-  private void addTimeSlider(
-      String key, String title, Time sliderMin, Time sliderMax, Time value, String color) {
-    TimeSlider slider = new TimeSlider(sliderMin, sliderMax, value, color);
-    timeItems.put(key, slider);
-    addSlider(key, title, slider);
-  }
-
-  // public void add(String title, Integer sliderMin, Integer sliderMax, String color) {
-  //   list.getChildren().add(new Item<Integer>(title, new LabeledSlider<Integer>(sliderMin,
-  // sliderMax, color)));
-  // }
 
   public Node getNode() {
     return list;

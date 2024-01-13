@@ -38,6 +38,10 @@ public class PomodoroTimer {
     return this;
   }
 
+  public int getRounds() {
+    return rounds;
+  }
+
   private PomodoroTimer setIntervalDuration(Interval type, Time duration) {
     if (duration.isNegative()) {
       throw new IllegalArgumentException("Interval duration must be greater than 0");

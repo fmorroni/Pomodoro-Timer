@@ -2,6 +2,7 @@ package frontend;
 
 import java.util.function.Function;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -42,6 +43,7 @@ public class LabeledSlider<T> extends HBox {
     valueLabel = new Label(minVal.toString());
     valueLabel.setMinWidth(50);
     valueLabel.getStyleClass().add("slider-label");
+    valueLabel.setAlignment(Pos.CENTER);
 
     slider
         .valueProperty()
