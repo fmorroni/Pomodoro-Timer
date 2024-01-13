@@ -13,24 +13,35 @@ public class SettingsList {
   private final VBox list = new VBox();
   private final Button saveBtn = new Button("Save");
 
+  // private static final Time workMin = Time.fromMinutes(10);
+  // private static final Time workMax = Time.fromHours(1);
+  // private static final Time shortBreakMin = Time.fromMinutes(1);
+  // private static final Time shortBreakMax = Time.fromMinutes(10);
+  // private static final Time longBreakMin = Time.fromMinutes(5);
+  // private static final Time longBreakMax = Time.fromMinutes(40);
+  private static final int roundsMin = 1;
+  private static final int roundsMax = 10;
+
+  private static final Time workMin = Time.fromSeconds(1);
+  private static final Time workMax = Time.fromSeconds(10);
+  private static final Time shortBreakMin = Time.fromSeconds(1);
+  private static final Time shortBreakMax = Time.fromSeconds(10);
+  private static final Time longBreakMin = Time.fromSeconds(1);
+  private static final Time longBreakMax = Time.fromSeconds(10);
+
   public SettingsList(PomodoroTimer pomodoro, Settings settings) {
-    TimeSlider workSlider =
-        new TimeSlider(
-            Time.fromMinutes(10), Time.fromHours(1), pomodoro.getWorkDuration(), "#fe4d4c");
+    TimeSlider workSlider = new TimeSlider(workMin, workMax, pomodoro.getWorkDuration(), "#fe4d4c");
     addSlider("Work Interval Duration", workSlider);
 
     TimeSlider shortBreakSlider =
-        new TimeSlider(
-            Time.fromMinutes(1), Time.fromMinutes(10), pomodoro.getShortBreakDuration(), "#05eb8b");
-
+        new TimeSlider(shortBreakMin, shortBreakMax, pomodoro.getShortBreakDuration(), "#05eb8b");
     addSlider("Short Break Interval Duration", shortBreakSlider);
 
     TimeSlider longBreakSlider =
-        new TimeSlider(
-            Time.fromMinutes(5), Time.fromMinutes(40), pomodoro.getLongBreakDuration(), "#0bbcda");
+        new TimeSlider(longBreakMin, longBreakMax, pomodoro.getLongBreakDuration(), "#0bbcda");
     addSlider("Long Break Interval Duration", longBreakSlider);
 
-    IntSlider roundsSlider = new IntSlider(1, 10, pomodoro.getRounds(), "#848b98");
+    IntSlider roundsSlider = new IntSlider(roundsMin, roundsMax, pomodoro.getRounds(), "#848b98");
     addSlider("Rounds", roundsSlider);
 
     list.getChildren().add(saveBtn);

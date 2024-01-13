@@ -15,3 +15,7 @@
   /* -fx-text-fill: derive(#2125de, 30%); */
   -fx-text-fill: derive(red, 30%);
 }
+
+#timerLabel {
+  -fx-font-size: 5em;
+}

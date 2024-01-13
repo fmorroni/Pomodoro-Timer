@@ -5,21 +5,36 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
 <View fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
   minWidth="-Infinity" stylesheets="@main.css" xmlns="http://javafx.com/javafx/21.0.1"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainPresenter">
   <center>
+    <!-- <VBox styleClass="box"> -->
+    <!--   <children> -->
+    <!--     <Button fx:id="button" mnemonicParsing="false" onAction="#updateColor" text="%button.text"> -->
+    <!--       <graphic> -->
+    <!--         <Icon content="PALETTE" /> -->
+    <!--       </graphic> -->
+    <!--     </Button> -->
+    <!--     <Label fx:id="color" text="%color.text" /> -->
+    <!--     <Label fx:id="label" /> -->
+    <!--     <Label>Hola Carola</Label> -->
+    <!--   </children> -->
+    <!-- </VBox> -->
     <VBox styleClass="box">
       <children>
-        <Button fx:id="button" mnemonicParsing="false" onAction="#updateColor" text="%button.text">
-          <graphic>
-            <Icon content="PALETTE" />
-          </graphic>
-        </Button>
-        <Label fx:id="color" text="%color.text" />
-        <Label fx:id="label" />
-        <Label>Hola Carola</Label>
+        <Label fx:id="intervalLabel" alignment="CENTER" />
+        <Label fx:id="timerLabel" text="00:00:00" alignment="CENTER" />
+        <Button fx:id="playBtn" text="Play/Pause" alignment="CENTER" />
+        <HBox alignment="BOTTOM_CENTER">
+          <Button fx:id="resetBtn" text="Reset" alignment="CENTER_LEFT" onAction="#resetInterval" />
+          <Button fx:id="nextIntervalBtn" text="Next Interval" alignment="CENTER_RIGHT"
+            onAction="#nextInterval" />
+        </HBox>
+        <Button fx:id="printBtn" text="Print Pomodoro" alignment="CENTER"
+          onAction="#printPomodoro" />
       </children>
     </VBox>
   </center>
