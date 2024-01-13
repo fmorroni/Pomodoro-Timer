@@ -124,7 +124,7 @@ public class PomodoroTimer {
   public String toString() {
     return ("Pomodoro Timer:\n"
             + "{\n"
-            + "\tworkIntervals: %d,\n"
+            + "\trounds: %d,\n"
             + "\tcurrentInterval: %d,\n"
             + "\tcurrentIntervalType: %s,\n"
             // + "\tremainingTime: %s\n"
