@@ -2,6 +2,7 @@ package frontend;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
 
+import backend.PomodoroTimer;
 import com.gluonhq.attach.display.DisplayService;
 import com.gluonhq.attach.util.Platform;
 import com.gluonhq.charm.glisten.application.AppManager;
@@ -18,11 +19,17 @@ public class PomodoroTimerApp extends Application {
 
   private final AppManager appManager = AppManager.initialize(this::postInit);
 
+  private final PomodoroTimer pomodoro = new PomodoroTimer();
+  private final Settings settings = new Settings(pomodoro);
+
   @Override
   public void init() {
     appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());
 
-    DrawerManager.buildDrawer(appManager);
+    settings.load();
+
+    SettingsList sl = new SettingsList(pomodoro, settings);
+    DrawerManager.buildDrawer(appManager, sl);
   }
 
   @Override
