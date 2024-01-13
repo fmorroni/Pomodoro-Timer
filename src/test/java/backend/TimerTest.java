@@ -5,13 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class TimerTest {
-  private final Timer tmr;
   private final Time start = new Time(3040);
   private final Time end = new Time(93743042);
-
-  TimerTest() {
-    tmr = new Timer(start);
-  }
+  private final Timer tmr = new Timer(start);
 
   @Test
   public void timeTest() {
@@ -47,5 +43,24 @@ public class TimerTest {
         Time.fromMinutes(10.5),
         tmr.getTime(Time.now().add(Time.fromMinutes(10.5))),
         "Should restart to current time and get time after 10.5 mins");
+  }
+
+  @Test
+  public void pausePlayTest() {
+    Timer tmr = new Timer(new Time(0));
+    Time t1 = Time.fromSeconds(10);
+    Time t2 = Time.fromSeconds(17);
+    Time t3 = Time.fromSeconds(20);
+    Time beforePause = tmr.getTime(t1);
+    tmr.pause(t1);
+    Time afterPause = tmr.getTime(t2);
+    assertEquals(beforePause, afterPause, "Time should remain the same while timer is paused.");
+    tmr.play(t2);
+    assertEquals(
+        beforePause, tmr.getTime(t2), "Time should still be the same right after resuming.");
+    assertEquals(
+        t1.add(t3.subtract(t2)),
+        tmr.getTime(t3),
+        "Time should have progressed only the amount since resuming.");
   }
 }

@@ -120,6 +120,18 @@ public class PomodoroTimer {
     timer.restart();
   }
 
+  public void pause() {
+    timer.pause();
+  }
+
+  public void play() {
+    timer.play();
+  }
+
+  public void togglePlayPause() {
+    timer.togglePlayPause();
+  }
+
   @Override
   public String toString() {
     return ("Pomodoro Timer:\n"
