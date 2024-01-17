@@ -47,10 +47,11 @@ public class TimerTest {
 
   @Test
   public void pausePlayTest() {
-    Timer tmr = new Timer(new Time(0));
+    Time t0 = new Time(0);
     Time t1 = Time.fromSeconds(10);
     Time t2 = Time.fromSeconds(17);
     Time t3 = Time.fromSeconds(20);
+    Timer tmr = new Timer(t0);
     Time beforePause = tmr.getTime(t1);
     tmr.pause(t1);
     Time afterPause = tmr.getTime(t2);
@@ -62,5 +63,9 @@ public class TimerTest {
         t1.add(t3.subtract(t2)),
         tmr.getTime(t3),
         "Time should have progressed only the amount since resuming.");
+    tmr.pause(t3);
+    tmr.restart(t1);
+    assertEquals(t0, tmr.getTime(t1), "Timer should reset even if paused.");
+    assertEquals(t2.subtract(t1), tmr.getTime(t2), "Timer should resume if reset when paused.");
   }
 }

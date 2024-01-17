@@ -2,7 +2,6 @@ package frontend;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
 
-import backend.PomodoroTimer;
 import backend.Time;
 import com.gluonhq.attach.display.DisplayService;
 import com.gluonhq.attach.util.Platform;
@@ -28,7 +27,6 @@ public class PomodoroTimerApp extends Application {
   private final AppManager appManager = AppManager.initialize(this::postInit);
 
   private final PomodoroTimer pomodoro = new PomodoroTimer();
-  private final Settings settings = new Settings(pomodoro);
 
   private final View mainView;
   private final MainPresenter mainPresenter;
@@ -47,17 +45,25 @@ public class PomodoroTimerApp extends Application {
     } catch (IOException e) {
       throw new RuntimeException("IOException: " + e);
     }
-    mainPresenter.setPrintPomodoroBtnAction(() -> System.out.println(pomodoro));
     mainPresenter.setNextIntervalBtnAction(
         () -> {
           pomodoro.nextInterval();
-          update();
+          updateInterval();
+          pauseTimer();
         });
     mainPresenter.setResetIntervalBtnAction(
         () -> {
           pomodoro.resetInterval();
-          update();
+          updateInterval();
+          pauseTimer();
         });
+    mainPresenter.setPlayBtnAction(
+        () -> {
+          if (pomodoro.isPaused()) playTimer();
+          else pauseTimer();
+        });
+    pauseTimer();
+    updateInterval();
     update();
   }
 
@@ -68,20 +74,43 @@ public class PomodoroTimerApp extends Application {
     scheduler.scheduleAtFixedRate(
         () -> javafx.application.Platform.runLater(this::update), 0, 1, TimeUnit.SECONDS);
 
-    settings.load();
+    pomodoro.loadSettings();
 
-    SettingsList sl = new SettingsList(pomodoro, settings);
+    SettingsList sl = new SettingsList(pomodoro);
+    sl.extraSaveBtnAction(
+        () -> {
+          updateInterval();
+        });
+
     DrawerManager.buildDrawer(appManager, sl);
+  }
+
+  private void pauseTimer() {
+    pomodoro.pause();
+    mainPresenter.setPlayBtnImageGraphic(PomodoroTimer.playIcon);
+    update();
+  }
+
+  private void playTimer() {
+    pomodoro.play();
+    mainPresenter.setPlayBtnImageGraphic(PomodoroTimer.pauseIcon);
+    update();
   }
 
   private void update() {
     Time remaining = pomodoro.getRemainingTime();
-    if (remaining.isNegative()) {
+    if (pomodoro.getAutomaticIntervals() && remaining.isNegative()) {
       pomodoro.nextInterval();
       remaining = pomodoro.getRemainingTime();
+      updateInterval();
     }
-    mainPresenter.setIntervalLabel(pomodoro.getCurrentIntervalType());
     mainPresenter.setTimerLabel(remaining);
+  }
+
+  private void updateInterval() {
+    mainPresenter.setTimerLabelColor(
+        PomodoroTimer.getIntervalColor(pomodoro.getCurrentIntervalType()));
+    mainPresenter.setIntervalLabel(pomodoro.getCurrentIntervalType());
   }
 
   @Override

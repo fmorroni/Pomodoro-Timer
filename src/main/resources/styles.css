@@ -3,8 +3,9 @@ NavigationDrawer {
   -fx-background: #3c4356;
 }
 
-Label {
-  -fx-font-size: 1.2em;
+.setting-name {
+  -fx-font-size: 1.3em;
+  -fx-text-fill: #bdbcbd;
   /* -fx-text-fill: -primary-swatch-700; */
 }
 

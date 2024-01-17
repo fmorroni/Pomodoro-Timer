@@ -27,14 +27,12 @@
       <children>
         <Label fx:id="intervalLabel" alignment="CENTER" />
         <Label fx:id="timerLabel" text="00:00:00" alignment="CENTER" />
-        <Button fx:id="playBtn" text="Play/Pause" alignment="CENTER" />
-        <HBox alignment="BOTTOM_CENTER">
+        <Button fx:id="playBtn" text="" alignment="CENTER" onAction="#togglePlayPause" />
+        <HBox alignment="BOTTOM_CENTER" spacing="10">
           <Button fx:id="resetBtn" text="Reset" alignment="CENTER_LEFT" onAction="#resetInterval" />
           <Button fx:id="nextIntervalBtn" text="Next Interval" alignment="CENTER_RIGHT"
             onAction="#nextInterval" />
         </HBox>
-        <Button fx:id="printBtn" text="Print Pomodoro" alignment="CENTER"
-          onAction="#printPomodoro" />
       </children>
     </VBox>
   </center>

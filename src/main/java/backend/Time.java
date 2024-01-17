@@ -108,7 +108,9 @@ public class Time implements Comparable<Time> {
   }
 
   public String toStringMinutesAndSeconds() {
-    return "%s%02d:%02d".formatted(isNegative ? "-" : "", hours * 60 + minutes, seconds);
+    long mins = hours * 60 + minutes;
+    long secs = Math.round(seconds + ms / 1000.0);
+    return "%s%02d:%02d".formatted(isNegative ? "-" : "", mins, secs);
   }
 
   @Override

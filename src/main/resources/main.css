@@ -6,8 +6,7 @@
 
 .box > .label {
   -fx-font-size: 1.3em;
-  /* -fx-text-fill: #de2125; */
-  -fx-text-fill: cyan;
+  -fx-text-fill: #bdbcbd;
 }
 
 .box > .button {
@@ -18,4 +17,13 @@
 
 #timerLabel {
   -fx-font-size: 5em;
+}
+
+#intervalLabel {
+  -fx-font-size: 3em;
+}
+
+#playBtn {
+  -fx-font-size: 4em;
+  -fx-background-color: transparent;
 }

@@ -112,12 +112,14 @@ public class PomodoroTimer {
 
   public void resetInterval() {
     timer.restart();
+    pause();
   }
 
   public void resetTimer() {
     currentInterval = 0;
     currentIntervalType = Interval.Work;
     timer.restart();
+    pause();
   }
 
   public void pause() {
@@ -128,25 +130,20 @@ public class PomodoroTimer {
     timer.play();
   }
 
-  public void togglePlayPause() {
-    timer.togglePlayPause();
+  public boolean isPaused() {
+    return timer.isPaused();
   }
 
   @Override
   public String toString() {
-    return ("Pomodoro Timer:\n"
-            + "{\n"
-            + "\trounds: %d,\n"
-            + "\tcurrentInterval: %d,\n"
-            + "\tcurrentIntervalType: %s,\n"
-            // + "\tremainingTime: %s\n"
-            + "\tIntervals: %s,\n"
-            + "\n}")
+    return ("rounds: %d,\n"
+            + "currentInterval: %d,\n"
+            + "currentIntervalType: %s,\n"
+            + "Intervals: %s,\n")
         .formatted(
             rounds,
             currentInterval,
             currentIntervalType,
-            // getRemainingTime(),
             intervalDurationsString().replace("\t", "\t\t").replace("}", "\t}"));
   }
 }

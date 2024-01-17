@@ -22,6 +22,7 @@ public class Timer {
 
   protected void restart(Time start) {
     this.start = start;
+    isPaused = false;
   }
 
   public Time getTime() {
@@ -54,10 +55,10 @@ public class Timer {
     isPaused = false;
   }
 
-  public void togglePlayPause() {
-    if (isPaused) play();
-    else pause();
-  }
+  // public void togglePlayPause() {
+  //   if (isPaused) play();
+  //   else pause();
+  // }
 
   public boolean isPaused() {
     return isPaused;

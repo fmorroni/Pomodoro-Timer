@@ -7,6 +7,7 @@ import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -20,10 +21,11 @@ public class MainPresenter {
   @FXML private Button printBtn;
   @FXML private Button nextIntervalBtn;
   @FXML private Button resetIntervalBtn;
+  @FXML private Button playBtn;
 
-  private Runnable printPomodoroBtnAction = () -> {};
   private Runnable nextIntervalBtnAction = () -> {};
   private Runnable resetIntervalBtnAction = () -> {};
+  private Runnable playBtnAction = () -> {};
 
   public void initialize() {
     main.showingProperty()
@@ -37,19 +39,18 @@ public class MainPresenter {
                 appBar.setTitleText("Pomodoro Timer");
               }
             });
-    // label.setText(String.format(resources.getString("label.text"), "JavaFX", javafxVersion));
   }
 
   public void setTimerLabel(Time t) {
     timerLabel.setText(t.toStringMinutesAndSeconds());
   }
 
-  public void setIntervalLabel(Interval interval) {
-    intervalLabel.setText(interval.toString());
+  public void setTimerLabelColor(String color) {
+    timerLabel.setStyle("-fx-text-fill: " + color + ";");
   }
 
-  public void setPrintPomodoroBtnAction(Runnable action) {
-    printPomodoroBtnAction = action;
+  public void setIntervalLabel(Interval interval) {
+    intervalLabel.setText(interval.toString());
   }
 
   public void setNextIntervalBtnAction(Runnable action) {
@@ -60,9 +61,12 @@ public class MainPresenter {
     resetIntervalBtnAction = action;
   }
 
-  @FXML
-  private void printPomodoro() {
-    printPomodoroBtnAction.run();
+  public void setPlayBtnImageGraphic(Node n) {
+    playBtn.setGraphic(n);
+  }
+
+  public void setPlayBtnAction(Runnable action) {
+    playBtnAction = action;
   }
 
   @FXML
@@ -73,6 +77,11 @@ public class MainPresenter {
   @FXML
   private void resetInterval() {
     resetIntervalBtnAction.run();
+  }
+
+  @FXML
+  private void togglePlayPause() {
+    playBtnAction.run();
   }
 
   // @FXML
