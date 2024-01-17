@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.geometry.Insets?>
 
 <View fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
   minWidth="-Infinity" stylesheets="@main.css" xmlns="http://javafx.com/javafx/21.0.1"
@@ -29,9 +31,23 @@
         <Label fx:id="timerLabel" text="00:00:00" alignment="CENTER" />
         <Button fx:id="playBtn" text="" alignment="CENTER" onAction="#togglePlayPause" />
         <HBox alignment="BOTTOM_CENTER" spacing="10">
-          <Button fx:id="resetBtn" text="Reset" alignment="CENTER_LEFT" onAction="#resetInterval" />
-          <Button fx:id="nextIntervalBtn" text="Next Interval" alignment="CENTER_RIGHT"
-            onAction="#nextInterval" />
+          <children>
+            <VBox alignment="CENTER">
+              <HBox.margin>
+                <Insets left="10" />
+              </HBox.margin>
+              <children>
+                <Label fx:id="roundsLabel" text="" />
+                <Button fx:id="resetBtn" text="Reset" onAction="#resetInterval" />
+              </children>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="nextIntervalBtn" text="Next Interval" onAction="#nextInterval">
+              <HBox.margin>
+                <Insets right="10" />
+              </HBox.margin>
+            </Button>
+          </children>
         </HBox>
       </children>
     </VBox>

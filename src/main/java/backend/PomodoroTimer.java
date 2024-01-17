@@ -146,4 +146,8 @@ public class PomodoroTimer {
             currentIntervalType,
             intervalDurationsString().replace("\t", "\t\t").replace("}", "\t}"));
   }
+
+  public int getCurrentRound() {
+    return currentInterval / 2 + 1;
+  }
 }

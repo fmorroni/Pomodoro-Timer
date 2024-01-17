@@ -4,7 +4,7 @@
   -fx-background-color: #2f384b;
 }
 
-.box > .label {
+.label {
   -fx-font-size: 1.3em;
   -fx-text-fill: #bdbcbd;
 }

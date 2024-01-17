@@ -62,6 +62,8 @@ public class PomodoroTimerApp extends Application {
           if (pomodoro.isPaused()) playTimer();
           else pauseTimer();
         });
+
+    pomodoro.loadSettings();
     pauseTimer();
     updateInterval();
     update();
@@ -74,11 +76,10 @@ public class PomodoroTimerApp extends Application {
     scheduler.scheduleAtFixedRate(
         () -> javafx.application.Platform.runLater(this::update), 0, 1, TimeUnit.SECONDS);
 
-    pomodoro.loadSettings();
-
     SettingsList sl = new SettingsList(pomodoro);
     sl.extraSaveBtnAction(
         () -> {
+          pauseTimer();
           updateInterval();
         });
 
@@ -111,6 +112,7 @@ public class PomodoroTimerApp extends Application {
     mainPresenter.setTimerLabelColor(
         PomodoroTimer.getIntervalColor(pomodoro.getCurrentIntervalType()));
     mainPresenter.setIntervalLabel(pomodoro.getCurrentIntervalType());
+    mainPresenter.setRoundsLabel(pomodoro.getCurrentRound(), pomodoro.getRounds());
   }
 
   @Override

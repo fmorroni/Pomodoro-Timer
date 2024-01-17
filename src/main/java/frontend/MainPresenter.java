@@ -20,6 +20,7 @@ public class MainPresenter {
   @FXML private Label timerLabel;
   @FXML private Button printBtn;
   @FXML private Button nextIntervalBtn;
+  @FXML private Label roundsLabel;
   @FXML private Button resetIntervalBtn;
   @FXML private Button playBtn;
 
@@ -41,9 +42,14 @@ public class MainPresenter {
             });
   }
 
+  public void setRoundsLabel(int current, int max) {
+    roundsLabel.setText("%d/%d".formatted(current, max));
+  }
+
   public void setTimerLabel(Time t) {
     timerLabel.setText(t.toStringMinutesAndSeconds());
   }
+
 
   public void setTimerLabelColor(String color) {
     timerLabel.setStyle("-fx-text-fill: " + color + ";");
