@@ -63,6 +63,10 @@ public class SettingsList {
     automativIntervals.getStyleClass().add("setting-name");
     automativIntervals.setSelected(pomodoro.getAutomaticIntervals());
 
+    CheckBox enableNotification = new CheckBox("Sound notification");
+    enableNotification.getStyleClass().add("setting-name");
+    enableNotification.setSelected(pomodoro.notificationEnabled());
+
     saveBtn.setOnAction(
         (ev) -> {
           pomodoro.saveWorkDuration(workSlider.getValue());
@@ -70,11 +74,12 @@ public class SettingsList {
           pomodoro.saveLongBrakeDuration(longBreakSlider.getValue());
           pomodoro.saveRounds(roundsSlider.getValue());
           pomodoro.saveAutomaticIntervals(automativIntervals.isSelected());
+          pomodoro.saveNotificationEnabled(enableNotification.isSelected());
           pomodoro.loadSettings();
           extraSaveBtnAction.run();
         });
 
-    list.getChildren().addAll(automativIntervals, saveBtn);
+    list.getChildren().addAll(automativIntervals, enableNotification, saveBtn);
   }
 
   private <T> void addSlider(String title, LabeledSlider<T> slider) {

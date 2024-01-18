@@ -34,6 +34,7 @@ public class PomodoroTimerApp extends Application {
 
   public PomodoroTimerApp() {
     super();
+
     try {
       FXMLLoader loader =
           new FXMLLoader(
