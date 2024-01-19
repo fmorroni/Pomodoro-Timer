@@ -110,7 +110,11 @@ public class Time implements Comparable<Time> {
   public String toStringMinutesAndSeconds() {
     long mins = hours * 60 + minutes;
     long secs = Math.round(seconds + ms / 1000.0);
-    return "%s%02d:%02d".formatted(isNegative ? "-" : "", mins, secs);
+    if (secs == 60) {
+      ++mins;
+      secs = 0;
+    }
+    return "%s%02d:%02d".formatted((isNegative && secs != 0) ? "-" : "", mins, secs);
   }
 
   @Override
