@@ -59,20 +59,20 @@ public class SettingsList implements CustomNode {
     IntSlider roundsSlider =
         new IntSlider("Rounds", roundsMin, roundsMax, pomodoro.getRounds(), "#848b98");
 
-    addAllCustomNodes(workSlider, shortBreakSlider, longBreakSlider, roundsSlider);
-
-    CheckBox automativIntervals = new CheckBox("Automatic next interval");
-    automativIntervals.getStyleClass().add("setting-name");
-    automativIntervals.setSelected(pomodoro.getAutomaticIntervals());
-    list.getChildren().add(automativIntervals);
     TimeSlider reminderIntervalSlider =
         new TimeSlider(
             "Reminder (0 to disable)",
             reminderIntervalMin,
             reminderIntervalMax,
             pomodoro.getReminderInterval(),
-            "#848b98");
-    addCustomNode(reminderIntervalSlider);
+            "#fef04c");
+
+    addAllCustomNodes(
+        workSlider, shortBreakSlider, longBreakSlider, reminderIntervalSlider, roundsSlider);
+
+    CheckBox automativIntervals = new CheckBox("Automatic next interval");
+    automativIntervals.getStyleClass().add("setting-name");
+    automativIntervals.setSelected(pomodoro.getAutomaticIntervals());
     automativIntervals
         .selectedProperty()
         .addListener(
@@ -103,7 +103,7 @@ public class SettingsList implements CustomNode {
           extraSaveBtnAction.run();
         });
 
-    list.getChildren().addAll(enableNotification, saveBtn);
+    list.getChildren().addAll(automativIntervals, enableNotification, saveBtn);
   }
 
   private void addCustomNode(CustomNode customNode) {

@@ -32,3 +32,7 @@ NavigationDrawer {
 .disabled {
   -fx-text-fill: #676565;
 }
+
+.check-box {
+  -fx-padding: 20px;
+}
