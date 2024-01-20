@@ -4,7 +4,7 @@ import backend.Time;
 import java.util.function.Function;
 import javafx.util.StringConverter;
 
-public class TimeSlider extends LabeledSlider<Time> {
+public class TimeSlider extends TitledLabeledSlider<Time> {
   // private static final int TICK_UNITS = 30;
   private static final int TICK_UNITS = 1;
   private static final Function<Time, Double> toDouble = (Time t) -> t.toSeconds();
@@ -25,7 +25,7 @@ public class TimeSlider extends LabeledSlider<Time> {
         }
       };
 
-  public TimeSlider(Time min, Time max, Time initVal, String color) {
-    super(min, max, initVal, TICK_UNITS, color, toDouble, fromDouble, converter);
+  public TimeSlider(String title, Time min, Time max, Time initVal, String color) {
+    super(title, min, max, initVal, TICK_UNITS, color, toDouble, fromDouble, converter);
   }
 }

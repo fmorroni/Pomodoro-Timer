@@ -136,10 +136,10 @@ public class PomodoroTimer {
 
   @Override
   public String toString() {
-    return ("rounds: %d,\n"
-            + "currentInterval: %d,\n"
-            + "currentIntervalType: %s,\n"
-            + "Intervals: %s,\n")
+    return ("rounds: %d\n"
+            + "currentInterval: %d\n"
+            + "currentIntervalType: %s\n"
+            + "Intervals: %s")
         .formatted(
             rounds,
             currentInterval,

@@ -2,15 +2,13 @@ package frontend;
 
 import backend.Interval;
 import backend.Time;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class SettingsList {
+public class SettingsList implements CustomNode {
   private final VBox list = new VBox();
   private final Button saveBtn = new Button("Save");
   private Runnable extraSaveBtnAction;
@@ -21,6 +19,8 @@ public class SettingsList {
   // private static final Time shortBreakMax = Time.fromMinutes(10);
   // private static final Time longBreakMin = Time.fromMinutes(5);
   // private static final Time longBreakMax = Time.fromMinutes(40);
+  private static final Time reminderIntervalMin = Time.fromMinutes(0);
+  private static final Time reminderIntervalMax = Time.fromMinutes(5);
   private static final int roundsMin = 1;
   private static final int roundsMax = 10;
 
@@ -34,34 +34,52 @@ public class SettingsList {
   public SettingsList(PomodoroTimer pomodoro) {
     TimeSlider workSlider =
         new TimeSlider(
+            "Work Interval Duration",
             workMin,
             workMax,
             pomodoro.getWorkDuration(),
             PomodoroTimer.getIntervalColor(Interval.Work));
-    addSlider("Work Interval Duration", workSlider);
 
     TimeSlider shortBreakSlider =
         new TimeSlider(
+            "Short Break Interval Duration",
             shortBreakMin,
             shortBreakMax,
             pomodoro.getShortBreakDuration(),
             PomodoroTimer.getIntervalColor(Interval.ShortBreak));
-    addSlider("Short Break Interval Duration", shortBreakSlider);
 
     TimeSlider longBreakSlider =
         new TimeSlider(
+            "Long Break Interval Duration",
             longBreakMin,
             longBreakMax,
             pomodoro.getLongBreakDuration(),
             PomodoroTimer.getIntervalColor(Interval.LongBreak));
-    addSlider("Long Break Interval Duration", longBreakSlider);
 
-    IntSlider roundsSlider = new IntSlider(roundsMin, roundsMax, pomodoro.getRounds(), "#848b98");
-    addSlider("Rounds", roundsSlider);
+    IntSlider roundsSlider =
+        new IntSlider("Rounds", roundsMin, roundsMax, pomodoro.getRounds(), "#848b98");
+
+    addAllCustomNodes(workSlider, shortBreakSlider, longBreakSlider, roundsSlider);
 
     CheckBox automativIntervals = new CheckBox("Automatic next interval");
     automativIntervals.getStyleClass().add("setting-name");
     automativIntervals.setSelected(pomodoro.getAutomaticIntervals());
+    list.getChildren().add(automativIntervals);
+    TimeSlider reminderIntervalSlider =
+        new TimeSlider(
+            "Reminder",
+            reminderIntervalMin,
+            reminderIntervalMax,
+            pomodoro.getReminderInterval(),
+            "#848b98");
+    addCustomNode(reminderIntervalSlider);
+    automativIntervals
+        .selectedProperty()
+        .addListener(
+            (ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean selected) -> {
+              if (selected) reminderIntervalSlider.disable();
+              else reminderIntervalSlider.enable();
+            });
 
     CheckBox enableNotification = new CheckBox("Sound notification");
     enableNotification.getStyleClass().add("setting-name");
@@ -75,24 +93,32 @@ public class SettingsList {
           pomodoro.saveRounds(roundsSlider.getValue());
           pomodoro.saveAutomaticIntervals(automativIntervals.isSelected());
           pomodoro.saveNotificationEnabled(enableNotification.isSelected());
+          pomodoro.saveReminderInterval(reminderIntervalSlider.getValue());
+          if (reminderIntervalSlider.getValue().toMs() == 0) {
+            pomodoro.saveReminderEnabled(false);
+          } else {
+            pomodoro.saveReminderEnabled(true);
+          }
           pomodoro.loadSettings();
           extraSaveBtnAction.run();
         });
 
-    list.getChildren().addAll(automativIntervals, enableNotification, saveBtn);
+    list.getChildren().addAll(enableNotification, saveBtn);
   }
 
-  private <T> void addSlider(String title, LabeledSlider<T> slider) {
-    VBox vbox = new VBox();
-    // setSpacing(10);
-    vbox.setAlignment(Pos.CENTER_LEFT);
-    Label titleLabel = new Label(title);
-    titleLabel.getStyleClass().add("setting-name");
-    vbox.getChildren().addAll(titleLabel, slider);
-    vbox.setSpacing(13);
-    vbox.setPadding(new Insets(10));
-    list.getChildren().add(vbox);
+  private void addCustomNode(CustomNode customNode) {
+    list.getChildren().add(customNode.getNode());
   }
+
+  private <T> void addAllCustomNodes(CustomNode... customNodes) {
+    for (CustomNode customNode : customNodes) {
+      addCustomNode(customNode);
+    }
+  }
+
+  // private <T> void disableSlider(LabeledSlider<T> slider) {
+
+  // }
 
   public Node getNode() {
     return list;

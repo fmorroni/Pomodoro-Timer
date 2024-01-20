@@ -18,13 +18,20 @@ public class PomodoroTimer extends backend.PomodoroTimer {
   public static final String ROUNDS_KEY = "rounds";
   public static final String AUTOMATIC_INTERVALS_KEY = "autoInterval";
   public static final String NOTIFICATION_ENABLED_KEY = "notificationEnabled";
+  public static final String REMINDER_INTERVAL_KEY = "reminderInterval";
+  public static final String REMINDER_ENABLED_KEY = "reminderEnabled";
 
-  public static final double DEFAULT_WORK_DURATION = 25 * 60;
-  public static final double DEFAULT_SHORT_BREAK_DURATION = 5 * 60;
-  public static final double DEFAULT_LONG_BREAK_DURATION = 15 * 60;
+  public static final Time DEFAULT_WORK_DURATION = Time.fromMinutes(25);
+  public static final Time DEFAULT_SHORT_BREAK_DURATION = Time.fromMinutes(5);
+  public static final Time DEFAULT_LONG_BREAK_DURATION = Time.fromMinutes(15);
   public static final double DEFAULT_ROUNDS = 4;
   public static final boolean DEFAULT_AUTOMATIC_INTERVALS = false;
   public static final boolean DEFAULT_NOTIFICATION_ENABLED = true;
+  public static final Time DEFAULT_REMINDER_INTERVAL = Time.fromMinutes(1);
+  public static final boolean DEFAULT_REMINDER_ENABLED = true;
+
+  private final Preferences preferences =
+      Preferences.userRoot().node("personal-projects/pomodoro-timer");
 
   private static final Map<Interval, String> intervalColors = new HashMap<>();
 
@@ -52,9 +59,12 @@ public class PomodoroTimer extends backend.PomodoroTimer {
     pauseIcon.setFitHeight(75);
   }
 
+  private boolean automaticIntervals;
   private boolean notificationEnabled = true;
   private static final String notificationResourceName = "/notification.mp3";
   private Media notificationMedia = null;
+  private Time reminderInterval = Time.fromMinutes(1);
+  private boolean reminderEnabled = true;
 
   // private MediaPlayer notificationPlayer = null;
 
@@ -73,21 +83,24 @@ public class PomodoroTimer extends backend.PomodoroTimer {
     return intervalColors.get(interval);
   }
 
-  private final Preferences preferences =
-      Preferences.userRoot().node("personal-projects/pomodoro-timer");
+  public void putTime(String key, Time time) {
+    preferences.putDouble(key, time.toSeconds());
+  }
 
-  private boolean automaticIntervals;
+  public Time getTime(String key, Time defaultTime) {
+    return Time.fromSeconds(preferences.getDouble(key, defaultTime.toSeconds()));
+  }
 
   public void saveWorkDuration(Time t) {
-    preferences.putDouble(WORK_DURATION_KEY, t.toSeconds());
+    putTime(WORK_DURATION_KEY, t);
   }
 
   public void saveShortBrakeDuration(Time t) {
-    preferences.putDouble(SHORT_BREAK_DURATION_KEY, t.toSeconds());
+    putTime(SHORT_BREAK_DURATION_KEY, t);
   }
 
   public void saveLongBrakeDuration(Time t) {
-    preferences.putDouble(LONG_BREAK_DURATION_KEY, t.toSeconds());
+    putTime(LONG_BREAK_DURATION_KEY, t);
   }
 
   public void saveRounds(int rounds) {
@@ -106,37 +119,56 @@ public class PomodoroTimer extends backend.PomodoroTimer {
     automaticIntervals = isAuto;
   }
 
-  public void setNotificationEnabled(boolean enabled) {
-    notificationEnabled = enabled;
+  public void saveNotificationEnabled(boolean enabled) {
+    preferences.putBoolean(NOTIFICATION_ENABLED_KEY, enabled);
   }
 
   public boolean notificationEnabled() {
     return notificationEnabled;
   }
 
+  public void setNotificationEnabled(boolean enabled) {
+    notificationEnabled = enabled;
+  }
+
+  public void saveReminderInterval(Time t) {
+    putTime(REMINDER_INTERVAL_KEY, t);
+  }
+
+  public Time getReminderInterval() {
+    return reminderInterval;
+  }
+
+  public void setReminderInterval(Time t) {
+    reminderInterval = t;
+  }
+
+  public void saveReminderEnabled(boolean enabled) {
+    preferences.putBoolean(REMINDER_ENABLED_KEY, enabled);
+  }
+
+  public boolean reminderEnabled() {
+    return reminderEnabled;
+  }
+
+  public void setReminderEnabled(boolean enabled) {
+    reminderEnabled = enabled;
+  }
+
   public void loadSettings() {
-    setWorkDuration(
-        Time.fromSeconds(preferences.getDouble(WORK_DURATION_KEY, DEFAULT_WORK_DURATION)));
-    setShortBreakDuration(
-        Time.fromSeconds(
-            preferences.getDouble(SHORT_BREAK_DURATION_KEY, DEFAULT_SHORT_BREAK_DURATION)));
-    setLongBreakDuration(
-        Time.fromSeconds(
-            preferences.getDouble(LONG_BREAK_DURATION_KEY, DEFAULT_LONG_BREAK_DURATION)));
+    setWorkDuration(getTime(WORK_DURATION_KEY, DEFAULT_WORK_DURATION));
+    setShortBreakDuration(getTime(SHORT_BREAK_DURATION_KEY, DEFAULT_SHORT_BREAK_DURATION));
+    setLongBreakDuration(getTime(LONG_BREAK_DURATION_KEY, DEFAULT_LONG_BREAK_DURATION));
     setRounds(preferences.getInt(ROUNDS_KEY, 4));
     setAutomaticIntervals(
         preferences.getBoolean(AUTOMATIC_INTERVALS_KEY, DEFAULT_AUTOMATIC_INTERVALS));
     setNotificationEnabled(
         preferences.getBoolean(NOTIFICATION_ENABLED_KEY, DEFAULT_NOTIFICATION_ENABLED));
+    setReminderInterval(getTime(REMINDER_INTERVAL_KEY, DEFAULT_REMINDER_INTERVAL));
+    setReminderEnabled(preferences.getBoolean(REMINDER_ENABLED_KEY, DEFAULT_REMINDER_ENABLED));
   }
 
-  public void saveNotificationEnabled(boolean enabled) {
-    preferences.putBoolean(NOTIFICATION_ENABLED_KEY, enabled);
-  }
-
-  @Override
-  public void nextInterval() {
-    super.nextInterval();
+  public void playNotification() {
     if (notificationEnabled) {
       try {
         MediaPlayer notificationPlayer = new MediaPlayer(notificationMedia);
@@ -155,7 +187,14 @@ public class PomodoroTimer extends backend.PomodoroTimer {
   }
 
   @Override
+  public void nextInterval() {
+    super.nextInterval();
+    playNotification();
+  }
+
+  @Override
   public String toString() {
-    return super.toString() + "automaticIntervals: " + automaticIntervals;
+    return "%s\nautomaticIntervals: %s\nreminder(interval|enabled): %s | %s"
+        .formatted(super.toString(), automaticIntervals, reminderInterval, reminderEnabled);
   }
 }

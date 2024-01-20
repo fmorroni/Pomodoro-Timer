@@ -3,7 +3,7 @@ package frontend;
 import java.util.function.Function;
 import javafx.util.StringConverter;
 
-public class IntSlider extends LabeledSlider<Integer> {
+public class IntSlider extends TitledLabeledSlider<Integer> {
   private static final int TICK_UNITS = 1;
   private static final Function<Integer, Double> toDouble =
       (Integer round) -> Double.valueOf(round);
@@ -23,7 +23,7 @@ public class IntSlider extends LabeledSlider<Integer> {
         }
       };
 
-  public IntSlider(int min, int max, int initVal, String color) {
-    super(min, max, initVal, TICK_UNITS, color, toDouble, fromDouble, converter);
+  public IntSlider(String title, int min, int max, int initVal, String color) {
+    super(title, min, max, initVal, TICK_UNITS, color, toDouble, fromDouble, converter);
   }
 }

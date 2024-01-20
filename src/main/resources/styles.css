@@ -28,3 +28,7 @@ NavigationDrawer {
   -fx-background-color: #2f384b;
   -fx-text-fill: #bdbcbd;
 }
+
+.disabled {
+  -fx-text-fill: #676565;
+}

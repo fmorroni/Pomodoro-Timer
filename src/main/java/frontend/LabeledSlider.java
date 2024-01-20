@@ -3,12 +3,14 @@ package frontend;
 import java.util.function.Function;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
-public class LabeledSlider<T> extends HBox {
+public class LabeledSlider<T> implements CustomNode {
+  private final HBox hbox = new HBox();
   protected final Slider slider;
   private final Label valueLabel;
   private final double tickUnits;
@@ -59,11 +61,11 @@ public class LabeledSlider<T> extends HBox {
 
     valueLabel.textProperty().bindBidirectional(slider.valueProperty(), converter);
 
-    getChildren().addAll(slider, valueLabel);
+    hbox.getChildren().addAll(slider, valueLabel);
 
-    setHgrow(slider, javafx.scene.layout.Priority.ALWAYS);
-    setHgrow(valueLabel, javafx.scene.layout.Priority.NEVER);
-    setSpacing(20);
+    HBox.setHgrow(slider, javafx.scene.layout.Priority.ALWAYS);
+    HBox.setHgrow(valueLabel, javafx.scene.layout.Priority.NEVER);
+    hbox.setSpacing(20);
   }
 
   private void setStyle(double val) {
@@ -89,5 +91,19 @@ public class LabeledSlider<T> extends HBox {
 
   public void setValue(T value) {
     slider.setValue(toDouble.apply(value));
+  }
+
+  public void disable() {
+    slider.setDisable(true);
+    valueLabel.getStyleClass().add("disabled");
+  }
+
+  public void enable() {
+    slider.setDisable(false);
+    valueLabel.getStyleClass().remove("disabled");
+  }
+
+  public Node getNode() {
+    return hbox;
   }
 }
