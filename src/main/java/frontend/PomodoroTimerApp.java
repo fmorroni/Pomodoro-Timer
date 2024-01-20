@@ -101,9 +101,6 @@ public class PomodoroTimerApp extends Application {
 
   private void update() {
     Time remaining = pomodoro.getRemainingTime();
-
-    System.out.println(remaining);
-
     if (pomodoro.getAutomaticIntervals() && remaining.toSeconds() < 1) {
       pomodoro.nextInterval();
       remaining = pomodoro.getRemainingTime();
@@ -113,10 +110,6 @@ public class PomodoroTimerApp extends Application {
         && (-remaining.toMs() % pomodoro.getReminderInterval().toMs()) < 1000) {
       pomodoro.playNotification();
     }
-
-    System.out.println(remaining);
-    System.out.println();
-
     mainPresenter.setTimerLabel(remaining);
   }
 

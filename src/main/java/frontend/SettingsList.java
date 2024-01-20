@@ -13,23 +13,23 @@ public class SettingsList implements CustomNode {
   private final Button saveBtn = new Button("Save");
   private Runnable extraSaveBtnAction;
 
-  // private static final Time workMin = Time.fromMinutes(10);
-  // private static final Time workMax = Time.fromMinutes(40);
-  // private static final Time shortBreakMin = Time.fromMinutes(1);
-  // private static final Time shortBreakMax = Time.fromMinutes(10);
-  // private static final Time longBreakMin = Time.fromMinutes(5);
-  // private static final Time longBreakMax = Time.fromMinutes(40);
+  private static final Time workMin = Time.fromMinutes(10);
+  private static final Time workMax = Time.fromMinutes(40);
+  private static final Time shortBreakMin = Time.fromMinutes(1);
+  private static final Time shortBreakMax = Time.fromMinutes(10);
+  private static final Time longBreakMin = Time.fromMinutes(5);
+  private static final Time longBreakMax = Time.fromMinutes(40);
   private static final Time reminderIntervalMin = Time.fromMinutes(0);
   private static final Time reminderIntervalMax = Time.fromMinutes(5);
   private static final int roundsMin = 1;
   private static final int roundsMax = 10;
 
-  private static final Time workMin = Time.fromSeconds(1);
-  private static final Time workMax = Time.fromSeconds(10);
-  private static final Time shortBreakMin = Time.fromSeconds(1);
-  private static final Time shortBreakMax = Time.fromSeconds(10);
-  private static final Time longBreakMin = Time.fromSeconds(1);
-  private static final Time longBreakMax = Time.fromSeconds(10);
+  // private static final Time workMin = Time.fromSeconds(1);
+  // private static final Time workMax = Time.fromSeconds(10);
+  // private static final Time shortBreakMin = Time.fromSeconds(1);
+  // private static final Time shortBreakMax = Time.fromSeconds(10);
+  // private static final Time longBreakMin = Time.fromSeconds(1);
+  // private static final Time longBreakMax = Time.fromSeconds(10);
 
   public SettingsList(PomodoroTimer pomodoro) {
     TimeSlider workSlider =
@@ -67,7 +67,7 @@ public class SettingsList implements CustomNode {
     list.getChildren().add(automativIntervals);
     TimeSlider reminderIntervalSlider =
         new TimeSlider(
-            "Reminder",
+            "Reminder (0 to disable)",
             reminderIntervalMin,
             reminderIntervalMax,
             pomodoro.getReminderInterval(),

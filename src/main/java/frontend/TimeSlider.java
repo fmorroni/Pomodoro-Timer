@@ -5,8 +5,8 @@ import java.util.function.Function;
 import javafx.util.StringConverter;
 
 public class TimeSlider extends TitledLabeledSlider<Time> {
-  // private static final int TICK_UNITS = 30;
-  private static final int TICK_UNITS = 1;
+  private static final int TICK_UNITS = 30;
+  // private static final int TICK_UNITS = 1;
   private static final Function<Time, Double> toDouble = (Time t) -> t.toSeconds();
   private static final Function<Double, Time> fromDouble =
       (Double seconds) -> Time.fromSeconds(seconds);
